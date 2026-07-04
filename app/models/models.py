@@ -53,7 +53,7 @@ class Products(Base):
     is_active = Column(Boolean(), default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     shop = relationship("Shops", back_populates="products")
-    order_items = relationship("OrderItems", back_populates="products")
+    order_items = relationship("OrderItems", back_populates="product")
     
 class Orders(Base):
     __tablename__ = 'orders'
@@ -74,4 +74,4 @@ class OrderItems(Base):
     quantity = Column(Integer(), nullable=False)
     unit_price = Column(Float(), nullable=False)
     order = relationship("Orders", back_populates="items")
-    products = relationship("Products", back_populates="order_items")
+    product = relationship("Products", back_populates="order_items")
