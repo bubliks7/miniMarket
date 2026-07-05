@@ -16,3 +16,7 @@ class UserResponse(BaseModel):
     role: str
     is_active: bool
     created_at: datetime
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
