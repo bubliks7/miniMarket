@@ -16,3 +16,12 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
 @router.post("/login", response_model=Token)
 def login(user: UserLogin, db: Session = Depends(get_db)):
     db_user = get_user_by_email(db, user.email)
+
+    if not db_user:
+        raise HTTPException(401, "nie znaleziono uzytkownika")
+
+    if not verify_password(user.password, db_user.password):
+        raise HTTPException(401, "zle haslo")
+    
+    token = create_access_token({"sub": str(db_user.id)})
+    return Token(access_token=token, token_type="bearer")

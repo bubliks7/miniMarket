@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from app.models.models import Shops
 from app.schemas.shop import ShopCreate
 
-def create_shop(db: Session, shop: ShopCreate):
-    db_shop = Shops(name=shop.name, slug=shop.slug, description=shop.description)
+def create_shop(db: Session, shop: ShopCreate, owner_id):
+    db_shop = Shops(name=shop.name, slug=shop.slug, description=shop.description, owner_id=owner_id)
     db.add(db_shop)
     db.commit()
     db.refresh(db_shop)
