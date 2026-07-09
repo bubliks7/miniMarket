@@ -1,1 +1,2 @@
 # miniMarket
+backend: FastAPI
