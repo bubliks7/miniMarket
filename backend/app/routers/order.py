@@ -1,19 +1,20 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.schemas.order import OrderCreate, OrderResponse
 from app.crud.order import create_order, get_order_by_id, get_orders_by_user
+from app.core.deps import get_current_user
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
 @router.post('/create', response_model=OrderResponse)
-def create(order: OrderCreate, db: Session = Depends(get_db)):
-    db_order = create_order(db, order, user_id="0bbbc15d-c306-46b3-8aec-d4db46ff0668")
+def create(order: OrderCreate, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
+    db_order = create_order(db, order, user_id=current_user.id)
     return db_order
 
-@router.get("/user/{user_id}", response_model=list[OrderResponse])
-def read_shop_by_user(user_id: str, db: Session = Depends(get_db)):
-    shop_product = get_orders_by_user(db, user_id="0bbbc15d-c306-46b3-8aec-d4db46ff0668")
+@router.get("/user/me", response_model=list[OrderResponse])
+def read_shop_by_user(db: Session = Depends(get_db), current_user = Depends(get_current_user)):
+    shop_product = get_orders_by_user(db, current_user.id)
     return shop_product
 
 @router.get("/{order_id}", response_model=OrderResponse)
