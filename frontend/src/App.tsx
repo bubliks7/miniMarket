@@ -3,7 +3,7 @@ import {Search,ShoppingCart,Store,User,Package,LogIn,LogOut,Plus,Minus,X,Chevron
 type Shop={id:number;name:string;slug:string;description:string;created_at:string};
 type Product={id:number;name:string;description:string;price:number;stock:number;is_active:boolean;created_at:string};
 type CartItem={product:Product;quantity:number};
-const API=import.meta.env.VITE_API_URL||'http://localhost:8000';
+const API='/api';
 async function api<T>(path:string,o:RequestInit={}){const h=new Headers(o.headers);h.set('Accept','application/json');if(o.body&&typeof o.body==='string')h.set('Content-Type','application/json');const token=localStorage.getItem('mm_token');if(token)h.set('Authorization','Bearer '+token);const r=await fetch(API+path,{...o,headers:h});if(!r.ok)throw new Error((await r.json().catch(()=>({}))).detail||'Wystąpił błąd');return r.json() as Promise<T>}
 const money=(v:number)=>new Intl.NumberFormat('pl-PL',{style:'currency',currency:'PLN'}).format(v);
 export default function App(){
